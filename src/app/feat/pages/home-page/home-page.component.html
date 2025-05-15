@@ -1,33 +1,28 @@
-<div class="flex h-full w-full items-center justify-center">
-  <div
-    class="h-3/4 w-3/4 rounded-lg shadow-lg flex flex-col items-center justify-center"
-  >
-    <div class="relative text-center text-2xl">¿Qué quieres hacer hoy?</div>
-    <div class="flex items-center justify-center gap-[32px] p-4 w-full">
-      <mat-card
-        appearance="outlined"
-        class="shadow-lg transform transition-transform duration-300 hover:scale-105"
-        style="cursor: pointer"
-      >
-        <mat-card-content>
-          <div class="flex items-center gap-3">
-            <img src="/cita-medica.png" width="64" height="64" alt="" />
-            <div>Agendar una cita</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-      <mat-card
-        appearance="outlined"
-        class="transform transition-transform duration-300 hover:scale-105"
-        style="cursor: pointer"
-      >
-        <mat-card-content>
-          <div class="flex items-center gap-3">
-            <img ngSrc="/planificador.png" width="64" height="64" alt="" />
-            <div>Consultar mis citas</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
+<div class="h-full p-7" id="container">
+  <div class="h-full rounded-lg p-5">
+    <div class="text-xl mt-2 mb-5">Hola, ¿qué quieres hacer hoy?</div>
+    <mat-tab-group mat-align-tabs="start" mat-stretch-tabs="true">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="mx-2">calendar_month</mat-icon>
+          Agendar una cita
+        </ng-template>
+        <div class="p-3 h-full">
+          <app-schedule/>
+        </div>
+      </mat-tab>
+
+      <mat-tab>
+        <div class="w-full bg-red-500">
+          <ng-template mat-tab-label>
+            <mat-icon class="mx-2">manage_search</mat-icon>
+            Consultar mis citas
+          </ng-template>
+        </div>
+        <div class="p-3">
+          <app-manage/>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </div>

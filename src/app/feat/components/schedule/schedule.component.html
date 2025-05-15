@@ -1,0 +1,37 @@
+<div class="h-full" id="container">
+  <mat-stepper
+    [linear]="false"
+    #stepper
+    class="disable-header-navigation"
+    style="--mat-sys-surface: #f0f9ff"
+  >
+    <!-- Paso 1 -->
+    <mat-step [editable]="true" state="emergency">
+      <ng-template matStepLabel style="pointer-events: none"
+        >Especialidad
+      </ng-template>
+      <ng-template matStepContent>
+        <app-specialty-select />
+      </ng-template>
+    </mat-step>
+    <!-- Paso 2 -->
+    <mat-step [editable]="true" state="medical_information">
+      <ng-template matStepLabel>Doctor</ng-template>
+      <ng-template matStepContent>
+        <p>
+          Especialidad seleccionada:
+          <strong>{{ selectedSpecialty?.name }}</strong>
+        </p>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </ng-template>
+    </mat-step>
+
+    <!-- Paso 3 -->
+    <mat-step [editable]="true" state="check">
+      <ng-template matStepLabel>Confirmar</ng-template>
+      <p>Contenido final</p>
+      <button mat-button matStepperPrevious>Back</button>
+    </mat-step>
+  </mat-stepper>
+</div>

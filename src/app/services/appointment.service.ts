@@ -10,4 +10,8 @@ export class AppointmentService {
   getAppointments() {
     return this.http.get('/api/appointments');
   }
+
+  getDoctors(specialtyId: number) {
+    return this.http.get(`/api/doctors/${specialtyId}`);
+  }
 }

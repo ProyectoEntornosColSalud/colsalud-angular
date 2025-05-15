@@ -1,0 +1,18 @@
+<div class="text-lg">Elige una especialidad</div>
+<div class="grid grid-cols-4 gap-6 p-4">
+  <div *ngFor="let specialty of specialties" class="h-full">
+    <mat-card style="--mat-sys-title-large-size: 1.25rem;"
+              appearance="outlined"
+              class="h-full min-h-[150px] flex flex-col justify-between cursor-pointer hover:shadow-md transition"
+              (click)="selectSpecialty(specialty)"
+              [class.border-blue-500]="selectedSpecialty?.name === specialty.name"
+    >
+      <mat-card-header>
+        <mat-card-title>{{ specialty.name }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="flex-grow">
+        <div class="mt-2">{{ specialty.description }}</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
