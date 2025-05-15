@@ -17,6 +17,7 @@ import { SpecialtySelectComponent } from '../stepper/specialty-select/specialty-
 import { StepperService } from '../../../services/stepper.service';
 import { MatIconModule } from '@angular/material/icon';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { ConfirmComponent } from '../stepper/confirm/confirm.component';
 
 @Component({
   imports: [
@@ -29,6 +30,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
     MatCardModule,
     SpecialtySelectComponent,
     MatIconModule,
+    ConfirmComponent,
   ],
   providers: [
     {
