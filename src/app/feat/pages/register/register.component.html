@@ -1,0 +1,101 @@
+<div class="flex items-center justify-center min-h-screen">
+  <div class="border border-gray-400 p-8 rounded-lg w-full max-w-4xl">
+    <p class="pb-7 text-3xl text-center font-mono text-slate-150">COLSALUD</p>
+    <h2 class="text-lg text-center mb-8">Registrarse en el sistema</h2>
+
+    <form
+      class="grid grid-cols-1 md:grid-cols-2 gap-6"
+      [formGroup]="registerForm"
+      (ngSubmit)="register()"
+    >
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Tipo de documento</mat-label>
+        <mat-select formControlName="docType">
+          @for (doc of documents; track doc) {
+            <mat-option [value]="doc.value">{{ doc.viewValue }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Número de documento</mat-label>
+        <input matInput type="text" formControlName="docNumber"/>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Nombres</mat-label>
+        <input matInput type="text" formControlName="name"/>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Apellidos</mat-label>
+        <input matInput type="text" formControlName="lastname"/>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Género</mat-label>
+        <mat-select formControlName="gender">
+          <mat-option></mat-option>
+          @for (gender of genders; track gender) {
+            <mat-option [value]="gender.value"
+            >{{ gender.viewValue }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Fecha de nacimiento</mat-label>
+        <input
+          matInput
+          formControlName="dob"
+          [matDatepicker]="picker"
+          placeholder="MM/DD/AAAA"
+          [min]="this.getMinDate()"
+          [max]="this.getMaxDate()"
+          (keydown)="onlyAllowNumbers($event)"
+        />
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Correo</mat-label>
+        <input matInput type="email" formControlName="email"/>
+        <mat-icon matSuffix>mail</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Teléfono</mat-label>
+        <input matInput type="tel" formControlName="phone"/>
+        <mat-icon matSuffix>phone</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Contraseña</mat-label>
+        <input matInput type="password" formControlName="password"/>
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Confirmar contraseña</mat-label>
+        <input matInput type="password" formControlName="confirmPassword"/>
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+    </form>
+
+    <div class="flex justify-center text-center items-center gap-4 mt-6">
+      <div class="text-sm cursor-pointer hover:text-blue-800" (click)="goToLogin()">Ya tengo cuenta</div>
+      <button
+        mat-flat-button
+        class="bg-blue-500 text-white px-4 py-2 rounded"
+        (click)="register()"
+      >
+        Registrarse
+      </button>
+    </div>
+  </div>
+</div>

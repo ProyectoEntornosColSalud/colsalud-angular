@@ -1,0 +1,28 @@
+<div class="h-screen">
+  <!-- Navbar fijo -->
+  <div
+    class="fixed top-0 left-0 bg-blue-600 text-white py-3 shadow-sm h-[80px] flex w-full items-center justify-between px-4 z-50">
+    <p class="text-4xl font-mono text-slate-150">COLSALUD</p>
+
+    <div class="flex flex-col justify-center items-center h-full cursor-pointer" [matMenuTriggerFor]="menu">
+        <img ngSrc="/user.svg"
+             alt="User" height="32" width="32"/>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>edit_square</mat-icon>
+          <span>Actualizar mis datos</span>
+        </button>
+        <button mat-menu-item (click)="navigate('/')">
+          <mat-icon>logout</mat-icon>
+          <span>Salir</span>
+        </button>
+      </mat-menu>
+      <span class="text-md">Mi cuenta</span>
+    </div>
+  </div>
+
+  <!-- Contenido debajo del navbar -->
+  <div class="pt-[80px] w-full h-full">
+    <router-outlet></router-outlet>
+  </div>
+</div>

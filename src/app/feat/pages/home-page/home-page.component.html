@@ -1,0 +1,33 @@
+<div class="flex h-full w-full items-center justify-center">
+  <div
+    class="h-3/4 w-3/4 rounded-lg shadow-lg flex flex-col items-center justify-center"
+  >
+    <div class="relative text-center text-2xl">¿Qué quieres hacer hoy?</div>
+    <div class="flex items-center justify-center gap-[32px] p-4 w-full">
+      <mat-card
+        appearance="outlined"
+        class="shadow-lg transform transition-transform duration-300 hover:scale-105"
+        style="cursor: pointer"
+      >
+        <mat-card-content>
+          <div class="flex items-center gap-3">
+            <img src="/cita-medica.png" width="64" height="64" alt="" />
+            <div>Agendar una cita</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card
+        appearance="outlined"
+        class="transform transition-transform duration-300 hover:scale-105"
+        style="cursor: pointer"
+      >
+        <mat-card-content>
+          <div class="flex items-center gap-3">
+            <img ngSrc="/planificador.png" width="64" height="64" alt="" />
+            <div>Consultar mis citas</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
