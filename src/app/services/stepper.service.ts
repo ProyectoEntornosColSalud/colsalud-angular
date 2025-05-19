@@ -15,24 +15,29 @@ export class StepperService {
   private doctorSubject = new BehaviorSubject<Doctor | null>(null);
   doctor$ = this.doctorSubject.asObservable();
 
+  // Nuevo BehaviorSubject para índice de paso activo
+  private activeStepSubject = new BehaviorSubject<number>(0);
+  activeStep$ = this.activeStepSubject.asObservable();
+
   setSpecialty(specialty: Specialty) {
     this.specialtySubject.next(specialty);
     this.doctorSubject.next(null); // Resetear doctor si se cambia especialidad
   }
 
-  setDoctor(doctor: Doctor) {
+  setDoctor(doctor: Doctor | null) {
     this.doctorSubject.next(doctor);
-  }
-
-  get currentSpecialty() {
-    return this.specialtySubject.value;
-  }
-
-  get currentDoctor() {
-    return this.doctorSubject.value;
   }
 
   nextStep() {
     this.nextStepSubject.next();
+  }
+
+  // Método para actualizar el step activo
+  setActiveStep(index: number) {
+    this.activeStepSubject.next(index);
+  }
+
+  get currentStep(): number {
+    return this.activeStepSubject.value;
   }
 }

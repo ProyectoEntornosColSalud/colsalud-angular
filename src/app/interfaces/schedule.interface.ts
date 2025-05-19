@@ -1,7 +1,7 @@
 export interface Specialty {
   id: number;
   name: string;
-  description: string;
+  description: string | null;
 }
 
 export interface Doctor {

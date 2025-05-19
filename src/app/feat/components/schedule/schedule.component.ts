@@ -18,6 +18,7 @@ import { StepperService } from '../../../services/stepper.service';
 import { MatIconModule } from '@angular/material/icon';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ConfirmComponent } from '../stepper/confirm/confirm.component';
+import { DoctorSelectComponent } from '../stepper/doctor-select/doctor-select.component';
 
 @Component({
   imports: [
@@ -31,6 +32,7 @@ import { ConfirmComponent } from '../stepper/confirm/confirm.component';
     SpecialtySelectComponent,
     MatIconModule,
     ConfirmComponent,
+    DoctorSelectComponent,
   ],
   providers: [
     {
@@ -60,14 +62,13 @@ export class ScheduleComponent implements OnInit {
     });
   }
 
-  get selectedSpecialty() {
-    return this.stepperService.currentSpecialty;
-  }
-
   ngOnInit(): void {
     this.stepperService.nextStep$.subscribe(() => {
-      console.log('Avanzando al siguiente paso');
-      this.stepper.next(); // Avanza al siguiente paso
+      this.stepper.next();
     });
+  }
+
+  onStepChange(selectedIndex: number) {
+    this.stepperService.setActiveStep(selectedIndex);
   }
 }

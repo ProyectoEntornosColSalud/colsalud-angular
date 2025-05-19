@@ -1,1 +1,21 @@
-<p>doctor-select works!</p>
+<div class="grid grid-cols-4 gap-6 p-4" *ngIf="doctors$ | async as doctors; else loading">
+  <div *ngFor="let doctor of doctors" class="h-full hover:shadow-sm transition hover:scale-103">
+    <mat-card style="--mat-sys-title-large-size: 1.25rem;"
+              appearance="outlined"
+              class="h-full min-h-[150px] flex flex-col justify-between cursor-pointer hover:shadow-md transition"
+              (click)="selectDoctor(doctor)">
+      <mat-card-header>
+        <mat-card-title>{{ doctor.name }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="flex-grow">
+        <div class="mt-2">{{ doctor?.name }}</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<ng-template #loading>
+  <div class="flex items-center justify-center mt-20 h-full w-full text-gray-600/50 text-2xl">
+    Cargando...
+  </div>
+</ng-template>
+

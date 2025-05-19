@@ -72,7 +72,7 @@ export class LoginComponent {
         .subscribe({
           next: (res) => {
             const token = res.headers.get('Authorization');
-            if (token) localStorage.setItem('token', token);
+            if (token) sessionStorage.setItem('token', token);
             else throw new Error('No se ha recibido el token');
             this.navigate('/home');
           },

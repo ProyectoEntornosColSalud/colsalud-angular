@@ -23,4 +23,9 @@ export class UserHomeLayoutComponent {
   navigate(path: string) {
     this.router.navigate([path]);
   }
+
+  logout() {
+    sessionStorage.removeItem('token');
+    this.router.navigate(['/']);
+  }
 }
