@@ -66,6 +66,7 @@ export class DoctorSelectComponent implements OnInit, OnDestroy {
   doctors$: Observable<Doctor[] | null> = of([]);
   selectedDoctor: Doctor | null = null;
   groupedDates$: Observable<{ date: string; times: string[] }[]> = of([]);
+  selectedTime: string | null = null;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -159,5 +160,11 @@ export class DoctorSelectComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  onTimeSelected(value:any) {
+    this.selectedTime = value;
+    this.stepperService.setSelectedTime(value);
+    console.log('Selected time:', value);
   }
 }

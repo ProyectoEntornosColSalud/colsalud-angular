@@ -15,29 +15,27 @@ export class StepperService {
   private doctorSubject = new BehaviorSubject<Doctor | null>(null);
   doctor$ = this.doctorSubject.asObservable();
 
+  private selectedTimeSubject = new BehaviorSubject<string>("");
+  selectedTime$ = this.selectedTimeSubject.asObservable();
+
   // Nuevo BehaviorSubject para índice de paso activo
   private activeStepSubject = new BehaviorSubject<number>(0);
   activeStep$ = this.activeStepSubject.asObservable();
 
   // caches en memoria
   private doctorCache: Doctor[] | null = null;
-  private doctorDatesCache = new Map<number, string[]>(); // doctorId -> fechas disponibles
+  private doctorDatesCache = new Map<number, string[]>();
 
   setSpecialty(specialty: Specialty) {
     const current = this.specialtySubject.value;
 
-    // Solo limpiar si es diferente la especialidad
     if (!current || current.id !== specialty.id) {
       this.specialtySubject.next(specialty);
-      this.doctorSubject.next(null); // Limpiar doctor seleccionado
-      this.doctorCache = null;       // Limpiar cache de doctores
-      this.doctorDatesCache.clear(); // Limpiar cache de fechas
-    } else {
-      // Si es la misma especialidad, no hacer nada (no limpiar)
-      // Opcionalmente podrías hacer: this.specialtySubject.next(specialty);
+      this.doctorSubject.next(null);
+      this.doctorCache = null;
+      this.doctorDatesCache.clear();
     }
   }
-
 
   setDoctor(doctor: Doctor | null) {
     this.doctorSubject.next(doctor);
@@ -61,7 +59,7 @@ export class StepperService {
   }
 
   // Accesores para cache
-  setDoctorCache(doctors: Doctor[]) {
+  setDoctorCache(doctors: Doctor[] | null) {
     this.doctorCache = doctors;
   }
 
@@ -75,5 +73,17 @@ export class StepperService {
 
   getDatesForDoctor(doctorId: number): string[] | undefined {
     return this.doctorDatesCache.get(doctorId);
+  }
+
+  clearDatesCache() {
+    this.doctorDatesCache.clear();
+  }
+
+  setSelectedTime(value: any) {
+    this.selectedTimeSubject.next(value);
+  }
+
+  getSelectedTime() {
+    return this.selectedTimeSubject.value;
   }
 }

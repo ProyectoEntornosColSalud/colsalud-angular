@@ -1,15 +1,34 @@
 <div class="flex h-full w-full justify-center items-center">
-  <div class="flex flex-col gap-4">
-    <h1 class="text-2xl font-bold text-gray-800">Confirmar cita</h1>
-    <div class="text-gray-600">
-      <p>Doctor: {{ doctor?.name }}</p>
-      <p>Especialidad: {{ specialty?.name }}</p>
-      <p>Fecha: {{ date | date: 'dd/MM/yyyy' }}</p>
-      <p>Hora: {{ time | date: 'shortTime' }}</p>
+  <div class="flex flex-col gap-4 w-1/3 justify-center items-center p-4 rounded-lg shadow-xs">
+    <h1 class="text-2xl font-semi-bold text-gray-800">Confirmar cita</h1>
+    <div class="text-gray-600 w-full">
+      <div class="flex flex-row gap-4 w-full justify-between">
+        <div class="">Doctor:</div>
+        <div>{{ doctor?.name }}</div>
+      </div>
+      <div class="flex flex-row gap-4 w-full justify-between">
+        <div class="">Especialidad:</div>
+        <div>{{ specialty?.name }}</div>
+      </div>
+      <div class="flex flex-row gap-4 w-full justify-between">
+        <div class="">Fecha:</div>
+        <div>{{ selectedDate | date: "dd/MMMM/YYYY " : "GMT-5" : "es-CO" }}</div>
+      </div>
+      <div class="flex flex-row gap-4 w-full justify-between">
+        <div class="">Hora:</div>
+        <div>{{ selectedDate | date: "shortTime" }}</div>
+      </div>
     </div>
   </div>
-
 </div>
-<p>confirm works!</p>
-<div>{{ specialty?.name }}</div>
-{{ doctor }}
+<div class="w-full flex justify-center mt-10">
+  <button
+    mat-flat-button
+    class="bg-blue-500 text-white px-4 py-2 rounded"
+    (click)="schedule()"
+  >
+    Sí, confirmar
+  </button>
+</div>
+
+<div>si no hay fecha definida que hace</div>

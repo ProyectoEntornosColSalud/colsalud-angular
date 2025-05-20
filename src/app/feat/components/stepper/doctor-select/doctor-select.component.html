@@ -1,4 +1,7 @@
-  <div *ngIf="specialty">Elige un doctor y una fecha disponible para tu cita de <strong> {{specialty?.name | lowercase}}</strong></div>
+<div *ngIf="specialty">
+  Elige un doctor y una fecha disponible para tu cita de
+  <strong> {{ specialty?.name | lowercase }}</strong>
+</div>
 <div
   class="grid grid-cols-12 gap-4 h-full p-4"
   *ngIf="doctors$ | async as doctors; else loading"
@@ -15,15 +18,12 @@
           {{ doctor.name }}
         </mat-option>
       </mat-select>
-
     </mat-form-field>
   </div>
 
   <!-- Columna derecha: Fechas -->
-  <div
-    class="col-span-8  flex items-center justify-center text-white text-xl"
-  >
-    <mat-chip-listbox class="mat-mdc-chip-set">
+  <div class="col-span-8 flex items-center justify-center text-white text-xl">
+    <mat-chip-listbox class="mat-mdc-chip-set" >
       <div *ngFor="let group of groupedDates$ | async">
         <div class="text-gray-700 mt-3 ml-3">
           {{
@@ -31,9 +31,11 @@
           }}
         </div>
         <div style="display: flex; flex-wrap: wrap; gap: 8px">
-          <mat-chip-option *ngFor="let time of group.times">
-            {{ time | date: "shortTime" }}
-          </mat-chip-option>
+          <div *ngFor="let time of group.times" >
+            <mat-chip-option [value]="time" (click)="onTimeSelected(time)">
+              {{ time | date: "shortTime" }}
+            </mat-chip-option>
+          </div>
         </div>
       </div>
     </mat-chip-listbox>
@@ -47,3 +49,5 @@
     Cargando...
   </div>
 </ng-template>
+
+{{selectedTime}}
