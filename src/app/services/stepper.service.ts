@@ -19,10 +19,25 @@ export class StepperService {
   private activeStepSubject = new BehaviorSubject<number>(0);
   activeStep$ = this.activeStepSubject.asObservable();
 
+  // caches en memoria
+  private doctorCache: Doctor[] | null = null;
+  private doctorDatesCache = new Map<number, string[]>(); // doctorId -> fechas disponibles
+
   setSpecialty(specialty: Specialty) {
-    this.specialtySubject.next(specialty);
-    this.doctorSubject.next(null); // Resetear doctor si se cambia especialidad
+    const current = this.specialtySubject.value;
+
+    // Solo limpiar si es diferente la especialidad
+    if (!current || current.id !== specialty.id) {
+      this.specialtySubject.next(specialty);
+      this.doctorSubject.next(null); // Limpiar doctor seleccionado
+      this.doctorCache = null;       // Limpiar cache de doctores
+      this.doctorDatesCache.clear(); // Limpiar cache de fechas
+    } else {
+      // Si es la misma especialidad, no hacer nada (no limpiar)
+      // Opcionalmente podrías hacer: this.specialtySubject.next(specialty);
+    }
   }
+
 
   setDoctor(doctor: Doctor | null) {
     this.doctorSubject.next(doctor);
@@ -39,5 +54,26 @@ export class StepperService {
 
   get currentStep(): number {
     return this.activeStepSubject.value;
+  }
+
+  getSelectedDoctor() {
+    return this.doctorSubject.value;
+  }
+
+  // Accesores para cache
+  setDoctorCache(doctors: Doctor[]) {
+    this.doctorCache = doctors;
+  }
+
+  getDoctorCache(): Doctor[] | null {
+    return this.doctorCache;
+  }
+
+  setDatesForDoctor(doctorId: number, dates: string[]) {
+    this.doctorDatesCache.set(doctorId, dates);
+  }
+
+  getDatesForDoctor(doctorId: number): string[] | undefined {
+    return this.doctorDatesCache.get(doctorId);
   }
 }

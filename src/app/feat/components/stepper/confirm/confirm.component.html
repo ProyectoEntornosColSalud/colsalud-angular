@@ -1,3 +1,15 @@
+<div class="flex h-full w-full justify-center items-center">
+  <div class="flex flex-col gap-4">
+    <h1 class="text-2xl font-bold text-gray-800">Confirmar cita</h1>
+    <div class="text-gray-600">
+      <p>Doctor: {{ doctor?.name }}</p>
+      <p>Especialidad: {{ specialty?.name }}</p>
+      <p>Fecha: {{ date | date: 'dd/MM/yyyy' }}</p>
+      <p>Hora: {{ time | date: 'shortTime' }}</p>
+    </div>
+  </div>
+
+</div>
 <p>confirm works!</p>
 <div>{{ specialty?.name }}</div>
 {{ doctor }}

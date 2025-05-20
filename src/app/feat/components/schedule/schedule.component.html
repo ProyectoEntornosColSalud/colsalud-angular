@@ -1,33 +1,47 @@
-<div class="h-full" id="container">
+<div class="h-full flex flex-col" id="container">
   <mat-stepper
     [linear]="true"
     #stepper
-    class="disable-header-navigation"
+    class="disable-header-navigation flex-1 flex flex-col"
     style="--mat-sys-surface: #f0f9ff"
     (selectionChange)="onStepChange($event.selectedIndex)"
   >
     <!-- Paso 1 -->
-      <mat-step [editable]="true">
-        <ng-template matStepLabel>Especialidad</ng-template>
-        <ng-template matStepContent>
-          <app-specialty-select/>
-        </ng-template>
-      </mat-step>
+    <mat-step [editable]="true">
+      <ng-template matStepLabel>Especialidad</ng-template>
+      <ng-template matStepContent>
+        <div class="flex flex-col h-full">
+          <app-specialty-select class="flex-1" />
+          <div class="mt-auto pt-4">
+            <button mat-button matStepperNext class="float-right">Siguiente</button>
+          </div>
+        </div>
+      </ng-template>
+    </mat-step>
+
     <!-- Paso 2 -->
     <mat-step [editable]="true">
       <ng-template matStepLabel>Doctor</ng-template>
       <ng-template matStepContent>
-        <app-doctor-select />
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        <div class="flex flex-col h-full">
+          <app-doctor-select class="flex-1" />
+          <div class="mt-auto pt-4 flex justify-between">
+            <button mat-button matStepperPrevious>Volver</button>
+            <button mat-button matStepperNext>Siguiente</button>
+          </div>
+        </div>
       </ng-template>
     </mat-step>
 
     <!-- Paso 3 -->
     <mat-step [editable]="true">
       <ng-template matStepLabel>Confirmar</ng-template>
-      <app-confirm />
-      <button mat-button matStepperPrevious>Back</button>
+      <div class="flex flex-col h-full">
+        <app-confirm class="flex-1" />
+        <div class="mt-auto pt-4">
+          <button mat-button matStepperPrevious>Volver</button>
+        </div>
+      </div>
     </mat-step>
   </mat-stepper>
 </div>

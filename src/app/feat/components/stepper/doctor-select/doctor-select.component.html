@@ -1,21 +1,49 @@
-<div class="grid grid-cols-4 gap-6 p-4" *ngIf="doctors$ | async as doctors; else loading">
-  <div *ngFor="let doctor of doctors" class="h-full hover:shadow-sm transition hover:scale-103">
-    <mat-card style="--mat-sys-title-large-size: 1.25rem;"
-              appearance="outlined"
-              class="h-full min-h-[150px] flex flex-col justify-between cursor-pointer hover:shadow-md transition"
-              (click)="selectDoctor(doctor)">
-      <mat-card-header>
-        <mat-card-title>{{ doctor.name }}</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="flex-grow">
-        <div class="mt-2">{{ doctor?.name }}</div>
-      </mat-card-content>
-    </mat-card>
+  <div *ngIf="specialty">Elige un doctor y una fecha disponible para tu cita de <strong> {{specialty?.name | lowercase}}</strong></div>
+<div
+  class="grid grid-cols-12 gap-4 h-full p-4"
+  *ngIf="doctors$ | async as doctors; else loading"
+>
+  <!-- Columna izquierda: Select de doctores -->
+  <div class="col-span-4">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Selecciona un doctor</mat-label>
+      <mat-select
+        [(value)]="selectedDoctor"
+        (selectionChange)="onDoctorChange($event.value)"
+      >
+        <mat-option *ngFor="let doctor of doctors" [value]="doctor">
+          {{ doctor.name }}
+        </mat-option>
+      </mat-select>
+
+    </mat-form-field>
+  </div>
+
+  <!-- Columna derecha: Fechas -->
+  <div
+    class="col-span-8  flex items-center justify-center text-white text-xl"
+  >
+    <mat-chip-listbox class="mat-mdc-chip-set">
+      <div *ngFor="let group of groupedDates$ | async">
+        <div class="text-gray-700 mt-3 ml-3">
+          {{
+            group.date | date: "dd 'de' MMMM 'del' YYYY " : "GMT-5" : "es-CO"
+          }}
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px">
+          <mat-chip-option *ngFor="let time of group.times">
+            {{ time | date: "shortTime" }}
+          </mat-chip-option>
+        </div>
+      </div>
+    </mat-chip-listbox>
   </div>
 </div>
+
 <ng-template #loading>
-  <div class="flex items-center justify-center mt-20 h-full w-full text-gray-600/50 text-2xl">
+  <div
+    class="flex items-center justify-center mt-20 h-full w-full text-gray-600/50 text-2xl"
+  >
     Cargando...
   </div>
 </ng-template>
-

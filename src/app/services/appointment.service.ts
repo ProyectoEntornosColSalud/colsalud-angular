@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Doctor, Specialty } from '../interfaces/schedule.interface';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +20,12 @@ export class AppointmentService {
       .pipe();
   }
 
-  getAppointments() {
-    return this.http.get('/api/appointments');
+  getAvailableDates(doctorId: number): Observable<string[]> {
+    return this.http
+      .get<any>(`${this.baseURL}/appointments/dates`, {
+        params: { doctor: doctorId },
+      })
+      .pipe(map((res) => res?.available ?? []));
   }
 
   getDoctors(specialtyId: number): Observable<HttpResponse<Doctor[]>> {
