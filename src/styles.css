@@ -30,3 +30,8 @@ body {
 .disable-header-navigation .mat-step-header {
   pointer-events: none;
 }
+
+.centered-cell {
+  text-align: center;
+  vertical-align: middle; /* opcional */
+}

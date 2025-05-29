@@ -10,3 +10,11 @@ export interface Doctor {
   age: number;
   gender: string;
 }
+
+export interface UserAppointment {
+  appointmentId: number;
+  doctorName: string;
+  specialtyName: string;
+  time: string;
+  status: string;
+}

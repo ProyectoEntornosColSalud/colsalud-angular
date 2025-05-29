@@ -15,7 +15,7 @@ export class StepperService {
   private doctorSubject = new BehaviorSubject<Doctor | null>(null);
   doctor$ = this.doctorSubject.asObservable();
 
-  private selectedTimeSubject = new BehaviorSubject<string>("");
+  private selectedTimeSubject = new BehaviorSubject<string>('');
   selectedTime$ = this.selectedTimeSubject.asObservable();
 
   // Nuevo BehaviorSubject para índice de paso activo
@@ -85,5 +85,14 @@ export class StepperService {
 
   getSelectedTime() {
     return this.selectedTimeSubject.value;
+  }
+
+  reset() {
+    this.specialtySubject.next(null);
+    this.doctorSubject.next(null);
+    this.selectedTimeSubject.next('');
+    this.activeStepSubject.next(0);
+    this.doctorCache = null;
+    this.doctorDatesCache.clear();
   }
 }

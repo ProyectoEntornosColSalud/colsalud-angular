@@ -3,6 +3,8 @@ import { StepperService } from '../../../../services/stepper.service';
 import { Doctor, Specialty } from '../../../../interfaces/schedule.interface';
 import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { AppointmentService } from '../../../../services/appointment.service';
+import {formatLocalISO} from '../../../../util/tools';
 
 @Component({
   selector: 'app-confirm',
@@ -16,7 +18,10 @@ export class ConfirmComponent implements OnInit {
   doctor: Doctor | null = null;
   selectedDate: Date | null = new Date();
 
-  constructor(private stepperService: StepperService) {}
+  constructor(
+    private stepperService: StepperService,
+    private appointmentService: AppointmentService,
+  ) {}
 
   ngOnInit() {
     this.stepperService.specialty$.subscribe((s) => (this.specialty = s));
@@ -27,7 +32,24 @@ export class ConfirmComponent implements OnInit {
     });
   }
 
-  protected readonly confirm = confirm;
+  schedule() {
+    if (!this.doctor || !this.specialty || !this.selectedDate) {
+      console.error('Doctor, specialty or date is not defined');
+      return;
+    }
+    this.appointmentService
+      .schedule(
+        this.doctor.id,
+        this.specialty.id,
+        formatLocalISO(this.selectedDate),
+      )
+      .subscribe({
+        next: () => {
+          this.appointmentService.reloadAppointments();
+          this.stepperService.reset();
+        },
+      });
+  }
 
-  schedule() {}
+  protected readonly formatLocalISO = formatLocalISO;
 }
