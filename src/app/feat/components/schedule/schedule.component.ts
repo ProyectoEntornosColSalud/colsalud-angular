@@ -66,6 +66,11 @@ export class ScheduleComponent implements OnInit {
     this.stepperService.nextStep$.subscribe(() => {
       this.stepper.next();
     });
+
+    this.stepperService.resetStepper$.subscribe(() => {
+      this.stepper.reset();
+      this.stepperService.setActiveStep(0);
+    });
   }
 
   onStepChange(selectedIndex: number) {

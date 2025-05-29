@@ -22,6 +22,9 @@ export class StepperService {
   private activeStepSubject = new BehaviorSubject<number>(0);
   activeStep$ = this.activeStepSubject.asObservable();
 
+  private resetStepperSubject = new Subject<void>();
+  resetStepper$ = this.resetStepperSubject.asObservable();
+
   // caches en memoria
   private doctorCache: Doctor[] | null = null;
   private doctorDatesCache = new Map<number, string[]>();
@@ -94,5 +97,6 @@ export class StepperService {
     this.activeStepSubject.next(0);
     this.doctorCache = null;
     this.doctorDatesCache.clear();
+    this.resetStepperSubject.next();
   }
 }
