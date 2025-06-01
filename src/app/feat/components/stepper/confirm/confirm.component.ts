@@ -49,7 +49,7 @@ export class ConfirmComponent implements OnInit {
         next: () => {
           this.appointmentService.reloadAppointments();
           this.stepperService.reset();
-          this.snackBar.open('Cita agendad correctamente', '', {
+          this.snackBar.open('Cita agendada correctamente', '', {
             duration: 5000,
             panelClass: ['mb-5'],
             horizontalPosition: 'right',

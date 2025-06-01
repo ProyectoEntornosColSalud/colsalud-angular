@@ -85,4 +85,10 @@ export class AppointmentService {
   reloadAppointments() {
     this.appointmentChangesSubject.next();
   }
+
+  cancelAppointment(appointmentId:number):Observable<HttpResponse<void>>{
+    return this.http.put<void>(`${this.baseURL}/appointments/cancel?appointment=${appointmentId}`, {}, {
+      observe:'response'
+    })
+  }
 }

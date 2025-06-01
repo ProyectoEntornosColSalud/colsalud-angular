@@ -35,6 +35,7 @@
           <mat-label>Dia de la cita</mat-label>
           <input
             matInput
+            [min]="today()"
             [matDatepicker]="dayPicker"
             [(ngModel)]="selectedFilterDay"
             (dateChange)="updateTimeOptions()"
@@ -45,23 +46,6 @@
           ></mat-datepicker-toggle>
           <mat-datepicker #dayPicker></mat-datepicker>
         </mat-form-field>
-        <mat-form-field>
-          <mat-label>Desde</mat-label>
-          <mat-select [(value)]="selectedFilterStartDate" [disabled]="!selectedFilterDay">
-            <mat-option *ngFor="let timeOption of starTimeOptions" [value]="timeOption.value">
-              {{ timeOption.label }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Hasta</mat-label>
-          <mat-select [(value)]="selectedFilterEndDate" [disabled]="!selectedFilterDay">
-            <mat-option *ngFor="let timeOption of endTimeOptions" [value]="timeOption.value">
-              {{ timeOption.label }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
       </div>
     </div>
     <mat-chip-listbox class="mat-mdc-chip-set w-full">
@@ -74,13 +58,14 @@
         </div>
         <div class="flex flex-wrap gap-2 ml-3">
           <div *ngFor="let time of group.times">
-            <mat-chip-option [value]="time" (click)="onTimeSelected(time)">
+            <mat-chip-option [value]="time" (selectionChange)="onTimeSelected(time)">
               {{ time | date: "shortTime" }}
             </mat-chip-option>
           </div>
         </div>
       </div>
     </mat-chip-listbox>
+    <div  class="text-gray-700 w-full justify-center text-center" *ngIf="noAppointments">Parece que no hay fechas disponibles para este dia</div>
   </div>
 </div>
 

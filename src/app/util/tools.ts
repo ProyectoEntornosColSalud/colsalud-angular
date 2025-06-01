@@ -53,3 +53,17 @@ export function withOptionalParams(
     .join('&');
   return query ? `${url}?${query}` : url;
 }
+
+export function getColTimeISO(): string {
+  const now = new Date();
+
+  const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+
+  // Create GMT-5 date by subtracting 5 hours
+  const gmt5Date = new Date(utcMs - 5 * 60 * 60 * 1000);
+
+  const pad = (n: number) => n.toString().padStart(2, '0');
+
+  return `${gmt5Date.getFullYear()}-${pad(gmt5Date.getMonth() + 1)}-${pad(gmt5Date.getDate())}` + 'T' +
+    `${pad(gmt5Date.getHours())}:${pad(gmt5Date.getMinutes())}:${pad(gmt5Date.getSeconds())}`;
+}

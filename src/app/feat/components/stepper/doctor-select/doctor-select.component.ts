@@ -18,8 +18,6 @@ import { MatInputModule } from '@angular/material/input';
 import {
   AsyncPipe,
   DatePipe,
-  JsonPipe,
-  LowerCasePipe,
   NgClass,
   NgForOf,
   NgIf,
@@ -37,11 +35,15 @@ import {
 } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
-import {MatDatepickerInputEvent, MatDatepickerModule} from '@angular/material/datepicker';
+import {
+  MatDatepickerInputEvent,
+  MatDatepickerModule,
+} from '@angular/material/datepicker';
 import {
   MatTimepickerModule,
   MatTimepickerOption,
 } from '@angular/material/timepicker';
+import {getColTimeISO} from '../../../../util/tools';
 
 registerLocaleData(esCO);
 
@@ -61,7 +63,6 @@ registerLocaleData(esCO);
     NgIf,
     MatChipsModule,
     DatePipe,
-    LowerCasePipe,
     MatDatepickerModule,
     NgClass,
     MatTimepickerModule,
@@ -79,7 +80,7 @@ export class DoctorSelectComponent implements OnInit, OnDestroy {
   groupedDates$: Observable<{ date: string; times: string[] }[]> = of([]);
   selectedTime: string | null = null;
   private destroy$ = new Subject<void>();
-
+  noAppointments: boolean = false;
   starTimeOptions: { label: string; value: Date }[] = [];
 
   updateStartTimeOptions() {
@@ -169,8 +170,10 @@ export class DoctorSelectComponent implements OnInit, OnDestroy {
 
     this.groupedDates$ = this.appointmentService
       .getAvailableDates(doctor.id)
+      .pipe()
       .pipe(
         map((dates: string[]) => {
+          this.noAppointments = dates.length === 0; // Actualizar estado de no citas
           this.stepperService.setDatesForDoctor(doctor.id, dates); // Cachear fechas
           return this.groupDates(dates);
         }),
@@ -198,11 +201,10 @@ export class DoctorSelectComponent implements OnInit, OnDestroy {
   onTimeSelected(value: any) {
     this.selectedTime = value;
     this.stepperService.setSelectedTime(value);
-    console.log('Selected time:', value);
+    this.stepperService.nextStep()
   }
 
   onDateChange(value: any) {
-    console.log('Selected date:', value);
   }
 
   generateTimeOptions(): MatTimepickerOption<Date>[] {
@@ -251,7 +253,12 @@ export class DoctorSelectComponent implements OnInit, OnDestroy {
     this.selectedFilterEndDate = null;
     this.groupedDates$ = of([]); // Limpiar fechas visibles
     this.groupedDates$ = this.appointmentService
-      .getAvailableDatesFilter(this.selectedDoctor!.id, this.selectedFilterDay?.toISOString().split('T')[0] ?? '', this.selectedFilterStartDate, this.selectedFilterEndDate)
+      .getAvailableDatesFilter(
+        this.selectedDoctor!.id,
+        this.selectedFilterDay?.toISOString().split('T')[0] ?? '',
+        this.selectedFilterStartDate,
+        this.selectedFilterEndDate,
+      )
       .pipe(
         map((dates: string[]) => {
           this.stepperService.setDatesForDoctor(this.selectedDoctor!.id, dates); // Cachear fechas
@@ -263,6 +270,9 @@ export class DoctorSelectComponent implements OnInit, OnDestroy {
   }
 
   onDateInput($event: MatDatepickerInputEvent<any, any>) {
-    console.log('Selected date input:', $event.value);
+  }
+
+  today():string {
+    return getColTimeISO().split('T')[0];
   }
 }

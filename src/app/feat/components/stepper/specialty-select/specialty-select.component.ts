@@ -48,7 +48,6 @@ export class SpecialtySelectComponent implements OnInit {
   }
 
   selectSpecialty(specialty: Specialty) {
-    console.log('Selected specialty:', specialty);
     this.stepperService.setSpecialty(specialty);
     this.stepperService.nextStep();
   }
