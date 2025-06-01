@@ -3,11 +3,11 @@
   <strong> {{ specialty?.name | lowercase }}</strong>
 </div>
 <div
-  class="grid grid-cols-12 gap-4 h-full p-4"
+  class="grid grid-cols-12 gap-4 h-full px-4"
   *ngIf="doctors$ | async as doctors; else loading"
 >
   <!-- Columna izquierda: Select de doctores -->
-  <div class="col-span-4">
+  <div class="col-span-4 mt-10">
     <mat-form-field appearance="fill" class="w-full">
       <mat-label>Selecciona un doctor</mat-label>
       <mat-select
@@ -22,16 +22,62 @@
   </div>
 
   <!-- Columna derecha: Fechas -->
-  <div class="col-span-8 flex items-center justify-center text-white text-xl">
-    <mat-chip-listbox class="mat-mdc-chip-set" >
-      <div *ngFor="let group of groupedDates$ | async">
-        <div class="text-gray-700 mt-3 ml-3">
-          {{
-            group.date | date: "dd 'de' MMMM 'del' YYYY " : "GMT-5" : "es-CO"
-          }}
+  <div
+    class="col-span-8 flex flex-col items-start justify-start text-white text-xl space-y-4 ml-7"
+  >
+    <div class="text-gray-700 text-md" *ngIf="selectedDoctor; else tip">
+      Horarios disponibles
+    </div>
+    <ng-template #tip>
+      <div class="flex w-full text-gray-500 text-md justify-center">
+        Selecciona un doctor para ver sus horarios disponibles.
+      </div>
+    </ng-template>
+    <div class="w-full flex" *ngIf="selectedDoctor">
+      <div class="flex gap-3 items-center justify-center">
+        <mat-form-field appearance="fill">
+          <mat-label>Dia de la cita</mat-label>
+          <input
+            matInput
+            [matDatepicker]="dayPicker"
+            [(ngModel)]="selectedFilterDay"
+            (dateChange)="updateTimeOptions()"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="dayPicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #dayPicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Desde</mat-label>
+          <mat-select [(value)]="selectedFilterStartDate">
+            <mat-option *ngFor="let timeOption of starTimeOptions" [value]="timeOption.value">
+              {{ timeOption.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Hasta</mat-label>
+          <mat-select [(value)]="selectedFilterEndDate">
+            <mat-option *ngFor="let timeOption of endTimeOptions" [value]="timeOption.value">
+              {{ timeOption.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+    </div>
+    <mat-chip-listbox class="mat-mdc-chip-set w-full">
+      <div
+        *ngFor="let group of groupedDates$ | async; index as index"
+        class="w-full mb-2"
+      >
+        <div class="text-gray-700 ml-3" [ngClass]="{ ' mt-3': index > 0 }">
+          {{ group.date | date: "dd 'de' MMMM 'del' YYYY" : "GMT-5" : "es-CO" }}
         </div>
-        <div style="display: flex; flex-wrap: wrap; gap: 8px">
-          <div *ngFor="let time of group.times" >
+        <div class="flex flex-wrap gap-2 ml-3">
+          <div *ngFor="let time of group.times">
             <mat-chip-option [value]="time" (click)="onTimeSelected(time)">
               {{ time | date: "shortTime" }}
             </mat-chip-option>
@@ -50,4 +96,6 @@
   </div>
 </ng-template>
 
-{{selectedTime}}
+{{ selectedTime }}
+
+<div class="">Espacio para registrar observaciones de una cita??</div>

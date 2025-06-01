@@ -5,6 +5,7 @@ import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { AppointmentService } from '../../../../services/appointment.service';
 import {formatLocalISO} from '../../../../util/tools';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-confirm',
@@ -21,6 +22,7 @@ export class ConfirmComponent implements OnInit {
   constructor(
     private stepperService: StepperService,
     private appointmentService: AppointmentService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -47,6 +49,12 @@ export class ConfirmComponent implements OnInit {
         next: () => {
           this.appointmentService.reloadAppointments();
           this.stepperService.reset();
+          this.snackBar.open('Cita agendad correctamente', '', {
+            duration: 5000,
+            panelClass: ['mb-5'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
         },
       });
   }

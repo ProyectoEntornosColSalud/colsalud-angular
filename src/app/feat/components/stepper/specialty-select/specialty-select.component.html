@@ -1,5 +1,5 @@
 <div *ngIf="specialties$ | async">Elige una de nuestras especialidades médicas disponibles</div>
-<div class="grid grid-cols-4 gap-6 p-4" *ngIf="specialties$ | async as specialties; else loading">
+<div class="grid md:grid-cols-4 sm:grid-cols-1 gap-6 p-4" *ngIf="specialties$ | async as specialties; else loading">
   <div *ngFor="let specialty of specialties" class="h-full hover:shadow-sm transition hover:scale-103">
     <mat-card style="--mat-sys-title-large-size: 1.25rem;"
               appearance="outlined"

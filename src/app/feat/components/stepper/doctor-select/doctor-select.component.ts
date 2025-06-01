@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   LOCALE_ID,
@@ -17,7 +18,9 @@ import { MatInputModule } from '@angular/material/input';
 import {
   AsyncPipe,
   DatePipe,
-  JsonPipe, LowerCasePipe,
+  JsonPipe,
+  LowerCasePipe,
+  NgClass,
   NgForOf,
   NgIf,
   registerLocaleData,
@@ -34,6 +37,11 @@ import {
 } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  MatTimepickerModule,
+  MatTimepickerOption,
+} from '@angular/material/timepicker';
 
 registerLocaleData(esCO);
 
@@ -55,11 +63,15 @@ registerLocaleData(esCO);
     DatePipe,
     JsonPipe,
     LowerCasePipe,
+    MatDatepickerModule,
+    NgClass,
+    MatTimepickerModule,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'es-CO' }],
   templateUrl: './doctor-select.component.html',
   standalone: true,
   styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DoctorSelectComponent implements OnInit, OnDestroy {
   specialty: Specialty | null = null;
@@ -69,11 +81,30 @@ export class DoctorSelectComponent implements OnInit, OnDestroy {
   selectedTime: string | null = null;
   private destroy$ = new Subject<void>();
 
+  starTimeOptions: { label: string; value: Date }[] = [];
+
+  updateStartTimeOptions() {
+    this.starTimeOptions = this.generateStartTimeSelectionOptions();
+  }
+
+  endTimeOptions: { label: string; value: Date }[] = [];
+  selectedFilterStartDate: any;
+  selectedFilterEndDate: any;
+  selectedFilterDay: any;
+
+  updateEndTimeOptions() {
+    this.endTimeOptions = this.generateStartTimeSelectionOptions();
+  }
+
   constructor(
     private stepperService: StepperService,
     private appointmentService: AppointmentService,
     private cdr: ChangeDetectorRef,
   ) {}
+
+  getStartTimeFilterOptions(): MatTimepickerOption<Date>[] {
+    return this.generateTimeOptions();
+  }
 
   ngOnInit() {
     combineLatest([
@@ -114,12 +145,13 @@ export class DoctorSelectComponent implements OnInit, OnDestroy {
         }
         this.cdr.markForCheck();
       });
+
     this.stepperService.doctor$
       .pipe(takeUntil(this.destroy$))
       .subscribe((doctor) => {
         if (!doctor) {
-          this.selectedDoctor = null; // ✅ Limpiar select
-          this.groupedDates$ = of([]); // ✅ Limpiar fechas visibles
+          this.selectedDoctor = null; //Limpiar select
+          this.groupedDates$ = of([]); //Limpiar fechas visibles
         }
       });
   }
@@ -127,7 +159,9 @@ export class DoctorSelectComponent implements OnInit, OnDestroy {
   onDoctorChange(doctor: Doctor) {
     this.selectedDoctor = doctor;
     this.stepperService.setDoctor(doctor);
-
+    this.selectedFilterDay = null;
+    this.selectedFilterStartDate = null;
+    this.selectedFilterEndDate = null;
     const cachedDates = this.stepperService.getDatesForDoctor(doctor.id);
     if (cachedDates) {
       this.groupedDates$ = of(this.groupDates(cachedDates));
@@ -162,9 +196,70 @@ export class DoctorSelectComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  onTimeSelected(value:any) {
+  onTimeSelected(value: any) {
     this.selectedTime = value;
     this.stepperService.setSelectedTime(value);
     console.log('Selected time:', value);
+  }
+
+  onDateChange(value: any) {
+    console.log('Selected date:', value);
+  }
+
+  generateTimeOptions(): MatTimepickerOption<Date>[] {
+    const opciones: MatTimepickerOption<Date>[] = [];
+    const baseFecha = new Date(Date.UTC(2024, 0, 1)); // 2024-01-01T00:00:00Z
+
+    for (let horaGMT5 = 7; horaGMT5 <= 18; horaGMT5++) {
+      // Convertir a UTC sumando 5 horas
+      const fechaUTC = new Date(baseFecha);
+      fechaUTC.setUTCHours(horaGMT5 + 5, 0, 0, 0);
+
+      opciones.push({
+        label: this.formatoHHMM(horaGMT5), // Formato requerido por mat-timepicker
+        value: fechaUTC,
+      });
+    }
+
+    return opciones;
+  }
+
+  generateStartTimeSelectionOptions(): { label: string; value: Date }[] {
+    const options: { label: string; value: Date }[] = [];
+    const baseDate = new Date(Date.UTC(2024, 0, 1)); // 2024-01-01T00:00:00Z
+
+    for (let hourGMT5 = 7; hourGMT5 <= 18; hourGMT5++) {
+      // Convertir a UTC sumando 5 horas
+      const utcDate = new Date(baseDate);
+      utcDate.setUTCHours(hourGMT5 + 5, 0, 0, 0);
+
+      options.push({
+        label: this.formatoHHMM(hourGMT5), // Formato requerido por mat-timepicker
+        value: utcDate,
+      });
+    }
+
+    return options;
+  }
+
+  private formatoHHMM(hora24: number): string {
+    // Devuelve por ejemplo "07:00", "18:00"
+    return `${hora24.toString().padStart(2, '0')}:00`;
+  }
+
+  updateTimeOptions() {
+    this.selectedFilterStartDate = null;
+    this.selectedFilterEndDate = null;
+    this.groupedDates$ = of([]); // Limpiar fechas visibles
+    this.groupedDates$ = this.appointmentService
+      .getAvailableDates(this.selectedDoctor!.id)
+      .pipe(
+        map((dates: string[]) => {
+          this.stepperService.setDatesForDoctor(this.selectedDoctor!.id, dates); // Cachear fechas
+          return this.groupDates(dates);
+        }),
+      );
+    this.updateStartTimeOptions();
+    this.updateEndTimeOptions();
   }
 }

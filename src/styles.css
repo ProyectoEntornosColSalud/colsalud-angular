@@ -16,7 +16,16 @@ body {
   --mdc-snackbar-supporting-text-color: white;
   --mat-snack-bar-button-color: white;
   --mdc-snackbar-container-size: auto;
+}
 
+.primary-snackbar  {
+  --mdc-snackbar-container-color: rgba(21, 93, 250, 0.95);
+  --mat-mdc-snack-bar-button-color: white;
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-snack-bar-button-color: white;
+  --mdc-snackbar-container-size: auto;
+/*  boottom margin*/
+  --mdc-snackbar-container-margin-bottom: 20px;
 }
 
 .error-snackbar {
