@@ -1,7 +1,3 @@
-<div *ngIf="specialty">
-  Elige un doctor y una fecha disponible para tu cita de
-  <strong> {{ specialty?.name | lowercase }}</strong>
-</div>
 <div
   class="grid grid-cols-12 gap-4 h-full px-4"
   *ngIf="doctors$ | async as doctors; else loading"
@@ -25,9 +21,9 @@
   <div
     class="col-span-8 flex flex-col items-start justify-start text-white text-xl space-y-4 ml-7"
   >
-    <div class="text-gray-700 text-md" *ngIf="selectedDoctor; else tip">
+    <p class="text-gray-700 " *ngIf="selectedDoctor; else tip">
       Horarios disponibles
-    </div>
+    </p>
     <ng-template #tip>
       <div class="flex w-full text-gray-500 text-md justify-center">
         Selecciona un doctor para ver sus horarios disponibles.
@@ -51,7 +47,7 @@
         </mat-form-field>
         <mat-form-field>
           <mat-label>Desde</mat-label>
-          <mat-select [(value)]="selectedFilterStartDate">
+          <mat-select [(value)]="selectedFilterStartDate" [disabled]="!selectedFilterDay">
             <mat-option *ngFor="let timeOption of starTimeOptions" [value]="timeOption.value">
               {{ timeOption.label }}
             </mat-option>
@@ -59,7 +55,7 @@
         </mat-form-field>
         <mat-form-field>
           <mat-label>Hasta</mat-label>
-          <mat-select [(value)]="selectedFilterEndDate">
+          <mat-select [(value)]="selectedFilterEndDate" [disabled]="!selectedFilterDay">
             <mat-option *ngFor="let timeOption of endTimeOptions" [value]="timeOption.value">
               {{ timeOption.label }}
             </mat-option>

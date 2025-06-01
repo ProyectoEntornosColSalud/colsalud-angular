@@ -6,7 +6,8 @@ import {
   Specialty,
   UserAppointment,
 } from '../interfaces/schedule.interface';
-import {map, Observable, Subject} from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
+import { withOptionalParams } from '../util/tools';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +33,21 @@ export class AppointmentService {
         params: { doctor: doctorId },
       })
       .pipe(map((res) => res?.available ?? []));
+  }
+
+  getAvailableDatesFilter(
+    doctorId: number,
+    day: string,
+    start?: number,
+    end?: number,
+  ): Observable<string[]> {
+    const url = withOptionalParams(`${this.baseURL}/appointments/dates`, {
+      doctor: doctorId,
+      day,
+      start,
+      end,
+    });
+    return this.http.get<any>(url).pipe(map((res) => res?.available ?? []));
   }
 
   getDoctors(specialtyId: number): Observable<HttpResponse<Doctor[]>> {

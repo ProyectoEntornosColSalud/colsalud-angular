@@ -37,7 +37,7 @@ import {
 } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MatDatepickerInputEvent, MatDatepickerModule} from '@angular/material/datepicker';
 import {
   MatTimepickerModule,
   MatTimepickerOption,
@@ -61,7 +61,6 @@ registerLocaleData(esCO);
     NgIf,
     MatChipsModule,
     DatePipe,
-    JsonPipe,
     LowerCasePipe,
     MatDatepickerModule,
     NgClass,
@@ -90,7 +89,7 @@ export class DoctorSelectComponent implements OnInit, OnDestroy {
   endTimeOptions: { label: string; value: Date }[] = [];
   selectedFilterStartDate: any;
   selectedFilterEndDate: any;
-  selectedFilterDay: any;
+  selectedFilterDay: Date | null = null;
 
   updateEndTimeOptions() {
     this.endTimeOptions = this.generateStartTimeSelectionOptions();
@@ -252,7 +251,7 @@ export class DoctorSelectComponent implements OnInit, OnDestroy {
     this.selectedFilterEndDate = null;
     this.groupedDates$ = of([]); // Limpiar fechas visibles
     this.groupedDates$ = this.appointmentService
-      .getAvailableDates(this.selectedDoctor!.id)
+      .getAvailableDatesFilter(this.selectedDoctor!.id, this.selectedFilterDay?.toISOString().split('T')[0] ?? '', this.selectedFilterStartDate, this.selectedFilterEndDate)
       .pipe(
         map((dates: string[]) => {
           this.stepperService.setDatesForDoctor(this.selectedDoctor!.id, dates); // Cachear fechas
@@ -261,5 +260,9 @@ export class DoctorSelectComponent implements OnInit, OnDestroy {
       );
     this.updateStartTimeOptions();
     this.updateEndTimeOptions();
+  }
+
+  onDateInput($event: MatDatepickerInputEvent<any, any>) {
+    console.log('Selected date input:', $event.value);
   }
 }
