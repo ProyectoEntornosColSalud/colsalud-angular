@@ -1,12 +1,14 @@
 <div class="flex items-center justify-center min-h-screen">
-  <div class="border border-gray-400 px-8 py-3 my-3 rounded-lg w-full max-w-4xl">
+  <div
+    class="border border-gray-400 px-8 py-3 my-3 rounded-lg w-full max-w-4xl"
+  >
     <p class="pb-7 text-3xl text-center font-mono text-slate-150">COLSALUD</p>
-    <h2 class="text-lg text-center mb-8">Registrarse en el sistema</h2>
+    <h2 class="text-lg text-center mb-8">Actualizar información personal</h2>
 
     <form
       class="grid grid-cols-1 md:grid-cols-2 gap-6"
-      [formGroup]="registerForm"
-      (ngSubmit)="register()"
+      [formGroup]="form"
+      (ngSubmit)="updateUserInfo()"
     >
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Tipo de documento</mat-label>
@@ -24,12 +26,12 @@
 
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Nombres</mat-label>
-        <input matInput type="text" formControlName="name"/>
+        <input matInput type="text" formControlName="name" />
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Apellidos</mat-label>
-        <input matInput type="text" formControlName="lastname"/>
+        <input matInput type="text" formControlName="lastname" />
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="w-full">
@@ -38,7 +40,7 @@
           <mat-option></mat-option>
           @for (gender of genders; track gender) {
             <mat-option [value]="gender.value"
-            >{{ gender.viewValue }}
+              >{{ gender.viewValue }}
             </mat-option>
           }
         </mat-select>
@@ -64,37 +66,36 @@
 
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Correo</mat-label>
-        <input matInput type="email" formControlName="email"/>
+        <input matInput type="email" formControlName="email" />
         <mat-icon matSuffix>mail</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Teléfono</mat-label>
-        <input matInput type="tel" formControlName="phone"/>
+        <input matInput type="tel" formControlName="phone" />
         <mat-icon matSuffix>phone</mat-icon>
       </mat-form-field>
-
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Contraseña</mat-label>
-        <input matInput type="password" formControlName="password"/>
+        <input matInput type="password" formControlName="password" />
         <mat-icon matSuffix>lock</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Confirmar contraseña</mat-label>
-        <input matInput type="password" formControlName="confirmPassword"/>
+        <input matInput type="password" formControlName="confirmPassword" />
         <mat-icon matSuffix>lock</mat-icon>
       </mat-form-field>
     </form>
 
     <div class="flex justify-center text-center items-center gap-4 mt-6">
-      <div class="text-sm cursor-pointer hover:text-blue-800" (click)="goToLogin()">Ya tengo cuenta</div>
+      <div class="text-sm cursor-pointer hover:text-blue-800" (click)="goHome()">Volver</div>
       <button
         mat-flat-button
         class="bg-blue-500 text-white px-4 py-2 rounded"
-        (click)="register()"
+        (click)="updateUserInfo()"
       >
-        Registrarse
+        Actualizar
       </button>
     </div>
   </div>

@@ -10,7 +10,7 @@
       <mat-menu #menu="matMenu">
         <button mat-menu-item>
           <mat-icon>edit_square</mat-icon>
-          <span>Actualizar mis datos</span>
+          <span (click)="goToUpdateUserData()">Actualizar mis datos</span>
         </button>
         <button mat-menu-item (click)="logout()">
           <mat-icon>logout</mat-icon>

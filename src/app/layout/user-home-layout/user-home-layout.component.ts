@@ -3,7 +3,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterOutlet } from '@angular/router';
-import {NgOptimizedImage} from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
+import { StepperService } from '../../services/stepper.service';
 
 @Component({
   imports: [
@@ -18,7 +19,10 @@ import {NgOptimizedImage} from '@angular/common';
   styles: ``,
 })
 export class UserHomeLayoutComponent {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private stepperService:StepperService
+  ) {}
 
   navigate(path: string) {
     this.router.navigate([path]);
@@ -26,6 +30,11 @@ export class UserHomeLayoutComponent {
 
   logout() {
     sessionStorage.removeItem('token');
+    this.stepperService.reset();
     this.router.navigate(['/']);
+  }
+
+  goToUpdateUserData() {
+    this.router.navigate(['/info'])
   }
 }

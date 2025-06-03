@@ -58,7 +58,7 @@
         </div>
         <div class="flex flex-wrap gap-2 ml-3">
           <div *ngFor="let time of group.times">
-            <mat-chip-option [value]="time" (selectionChange)="onTimeSelected(time)">
+            <mat-chip-option [value]="time" (click)="onTimeSelected(time)">
               {{ time | date: "shortTime" }}
             </mat-chip-option>
           </div>

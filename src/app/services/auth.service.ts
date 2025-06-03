@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { catchError, Observable, throwError } from 'rxjs';
-import { toSnake } from '../util/tools';
+import { catchError, map, Observable, throwError } from 'rxjs';
+import { toCamel, toSnake } from '../util/tools';
 import { LoginData, RegisterData } from '../interfaces/auth.interface';
 
 @Injectable({
@@ -33,5 +33,29 @@ export class AuthService {
           return throwError(() => error);
         }),
       );
+  }
+
+  getUserInfo(): Observable<HttpResponse<RegisterData>> {
+    return this.http
+      .get<RegisterData>(`${this.baseURl}/user`, {
+        observe: 'response',
+      })
+      .pipe(
+        map((response) => {
+          const transformedBody = toCamel(response.body);
+          // Clone the response with transformed body
+          return response.clone({ body: transformedBody });
+        }),
+      );
+  }
+
+  updateUserInfo(data: RegisterData) {
+    // Transform data to snake_case before sending
+    data = toSnake(data);
+    return this.http.put(
+      `${this.baseURl}/user`,
+      { ...data },
+      { observe: 'response' },
+    );
   }
 }
