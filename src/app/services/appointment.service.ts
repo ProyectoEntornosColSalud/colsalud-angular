@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import {
+  AppointmentDetail,
   Doctor,
   Specialty,
   UserAppointment,
@@ -86,9 +87,53 @@ export class AppointmentService {
     this.appointmentChangesSubject.next();
   }
 
-  cancelAppointment(appointmentId:number):Observable<HttpResponse<void>>{
-    return this.http.put<void>(`${this.baseURL}/appointments/cancel?appointment=${appointmentId}`, {}, {
-      observe:'response'
-    })
+  cancelAppointment(appointmentId: number): Observable<HttpResponse<void>> {
+    return this.http.put<void>(
+      `${this.baseURL}/appointments/cancel?appointment=${appointmentId}`,
+      {},
+      {
+        observe: 'response',
+      },
+    );
   }
+
+  getDoctorAppointments(
+    searchType: 'TODAY' | 'PENDING' | 'PAST',
+    page: number,
+    size: number,
+  ): Observable<HttpResponse<any>> {
+    return this.http.get<any>(
+      withOptionalParams(`${this.baseURL}/doctor/appointments`, {
+        status: searchType,
+        page,
+        size,
+        sort: 'startTime,asc',
+      }),
+      {
+        observe: 'response',
+      },
+    );
+  }
+
+  getAppointmentDetail(
+    appointmentId: number,
+  ): Observable<HttpResponse<AppointmentDetail>> {
+    return this.http.get<AppointmentDetail>(
+      `${this.baseURL}/appointments/${appointmentId}/detail`,
+      {
+        observe: 'response',
+      },
+    );
+  }
+
+  markAsAttended(appointmentId: number): Observable<HttpResponse<void>> {
+    return this.http.patch<void>(
+      `${this.baseURL}/doctor/appointments/${appointmentId}/check`,
+      {},
+      {
+        observe: 'response',
+      },
+    );
+  }
+
 }

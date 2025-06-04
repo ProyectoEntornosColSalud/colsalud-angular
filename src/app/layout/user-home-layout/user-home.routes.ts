@@ -8,4 +8,11 @@ export const routes: Routes = [
         (m) => m.HomePageComponent,
       ),
   },
+  {
+    path: 'doctor',
+    loadComponent: () =>
+      import('../../feat/pages/doctor-view/doctor-view.component').then(
+        (m) => m.DoctorViewComponent,
+      ),
+  },
 ];

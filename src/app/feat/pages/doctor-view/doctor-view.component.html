@@ -1,0 +1,79 @@
+<div class="flex flex-col w-full">
+  <div class="pt-5 pl-5 mb-3">
+    <div class="text-lg mb-4">Historial de citas</div>
+
+    <mat-chip-listbox
+      class="mat-mdc-chip-set w-full mb-4"
+      [(ngModel)]="selectedFilter"
+      (change)="handleFilterChange($event)"
+    >
+      <div class="w-full">
+        <div class="flex flex-wrap gap-2 ml-3">
+          <mat-chip-option value="TODAY" selected>HOY</mat-chip-option>
+          <mat-chip-option value="PENDING">FUTURO</mat-chip-option>
+          <mat-chip-option value="PAST">OTRAS</mat-chip-option>
+        </div>
+      </div>
+    </mat-chip-listbox>
+
+    <!-- Scrollable content wrapper -->
+    <div class="space-y-6" *ngIf="thereIsContent; else noData">
+      <div *ngFor="let day of (groupedAppointments$ | async) ?? [] | keyvalue">
+        <!-- Group title -->
+        <div class="text-xl mb-2">{{ day.key }}</div>
+
+        <!-- Flex container for cards -->
+        <div class="flex flex-wrap gap-4">
+          <div *ngFor="let appointment of day.value" class="flex-shrink-0">
+            <mat-card
+              class="transition hover:scale-103 h-auto w-[20rem] bg-red-50 inline-flex"
+              appearance="outlined"
+              style="--mat-sys-surface: #f0f9ff"
+              (click)="onCardClick(appointment.appointmentId)"
+            >
+              <mat-card-header>
+                <mat-card-subtitle>
+                  {{
+                    appointment.startTime
+                      | date: "shortTime" : "GMT-5" : "es-CO"
+                  }}
+                  <span
+                    *ngIf="appointment.status !== 'PENDIENTE'"
+                    class="text-sm ml-5"
+                    [ngClass]="getColorText(appointment.status)"
+                    >{{ appointment!.status }}</span
+                  >
+                </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <p>Especialidad: {{ appointment.specialtyName }}</p>
+                <p>Paciente: {{ appointment.patientName }}</p>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noData>
+      <div class="flex flex-col items-center justify-center h-96">
+        <mat-icon class="text-6xl text-gray-400">info</mat-icon>
+        <p class="text-gray-600 mt-4">
+          Parece que no tienes citas programadas.
+        </p>
+      </div>
+    </ng-template>
+  </div>
+  <mat-paginator
+    *ngIf="selectedFilter !== 'TODAY' && thereIsContent"
+    style="--mat-sys-surface: #f0f9ff"
+    class="w-full bg-white p-4"
+    (page)="handlePageEvent($event)"
+    [length]="totalAppointments"
+    [pageIndex]="0"
+    [pageSize]="25"
+    [pageSizeOptions]="[10, 25, 50, 100]"
+    [showFirstLastButtons]="true"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+</div>

@@ -87,7 +87,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
           .cancelAppointment(element.appointmentId)
           .subscribe({
             next: () => {
-              this.snackBar.open('Se ha cancelado la cita', '', {
+              this.snackBar.open('Se ha cancelado la cita', 'Ok', {
                 duration: 5000,
                 panelClass: ['mb-5'],
                 horizontalPosition: 'right',

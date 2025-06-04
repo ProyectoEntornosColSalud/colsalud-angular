@@ -39,7 +39,7 @@ export class LoginComponent {
     private snackBar: MatSnackBar,
   ) {
     this.formGroup = this.fb.group({
-      username: ['901234567', Validators.required],
+      username: ['123443299', Validators.required],
       password: ['hola123', Validators.required],
     });
   }
@@ -69,24 +69,6 @@ export class LoginComponent {
           username: this.formGroup.value.username,
           password: this.formGroup.value.password,
         })
-        .subscribe({
-          next: (res) => {
-            const token = res.headers.get('Authorization');
-            if (token) sessionStorage.setItem('token', token);
-            else throw new Error('No se ha recibido el token');
-            this.navigate('/home');
-          },
-          error: (error) => {
-            if (error.status == 401) {
-              this.snackBar.open('Usuario o contraseña incorrectos', '', {
-                duration: 5000,
-                panelClass: ['error-snackbar', 'mb-5'],
-                horizontalPosition: 'right',
-                verticalPosition: 'top',
-              });
-            }
-          },
-        });
     }
   }
 }

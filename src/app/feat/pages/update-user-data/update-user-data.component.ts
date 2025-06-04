@@ -132,6 +132,19 @@ export class UpdateUserDataComponent implements OnInit{
     if (!YYYY_MM_DD_REGEX.test(date)){
       date = toLocalDate(new Date(date));
     }
+    if (this.form.value.password){
+      if (this.form.value.password !== this.form.value.confirmPassword) {
+        this.form.controls['confirmPassword'].setErrors({ mismatch: true });
+        this.form.controls['password'].setErrors({ mismatch: true });
+        this.snackBar.open('Las contraseñas no coinciden', 'Cerrar', {
+          duration: 5000,
+          panelClass: ['error-snackbar', 'mb-5'],
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        return;
+      }
+    }
     this.authService
       .updateUserInfo({
         name: this.form.value.name,
@@ -145,9 +158,18 @@ export class UpdateUserDataComponent implements OnInit{
         password: this.form.value.password,
       })
       .subscribe({
+        next: (res) => {
+          this.snackBar.open('Información actualizada correctamente', 'Cerrar', {
+            duration: 5000,
+            panelClass: [ 'mb-5'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+          this.router.navigate(['/home']).then();
+        },
         error: (error) => {
           console.error('Update info error', error);
-          this.snackBar.open(error.error.message, '', {
+          this.snackBar.open(error.error.message, 'Ok', {
             duration: 5000,
             panelClass: ['error-snackbar', 'mb-5'],
             horizontalPosition: 'right',

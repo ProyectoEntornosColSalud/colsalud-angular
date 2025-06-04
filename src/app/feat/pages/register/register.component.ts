@@ -15,6 +15,7 @@ import { AuthService } from '../../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { toLocalDate } from '../../../util/tools';
+import {GENDERS} from '../../../interfaces/schedule.interface';
 
 @Component({
   imports: [
@@ -36,30 +37,7 @@ export class RegisterComponent {
     { value: 'TI', viewValue: 'Tarjeta de identidad' },
     { value: 'CE', viewValue: 'Cédula de extranjería' },
   ];
-  genders: SelectOption[] = [
-    { value: 'hombre', viewValue: 'Hombre' },
-    { value: 'mujer', viewValue: 'Mujer' },
-    { value: 'no-binario', viewValue: 'No binario' },
-    { value: 'genero-fluido', viewValue: 'Género fluido' },
-    { value: 'bigenero', viewValue: 'Bigénero' },
-    { value: 'trigenero', viewValue: 'Trigénero' },
-    { value: 'agenero', viewValue: 'Agénero' },
-    { value: 'demiboy', viewValue: 'Demiboy' },
-    { value: 'demigirl', viewValue: 'Demigirl' },
-    { value: 'neutrois', viewValue: 'Neutrois' },
-    { value: 'maverique', viewValue: 'Maverique' },
-    { value: 'androgino', viewValue: 'Andrógino' },
-    { value: 'genero-queer', viewValue: 'Género queer' },
-    { value: 'dos-espiritus', viewValue: 'Dos espíritus' },
-    { value: 'hijra', viewValue: 'Hijra' },
-    { value: 'faafafine', viewValue: 'Fa’afafine' },
-    { value: 'bakla', viewValue: 'Bakla' },
-    { value: 'muxhe', viewValue: 'Muxhe' },
-    { value: 'intergenero', viewValue: 'Intergénero' },
-    { value: 'autogenero', viewValue: 'Autogénero' },
-    { value: 'aliagenero', viewValue: 'Aliagénero' },
-    { value: 'xenogenero', viewValue: 'Xenogénero' },
-  ];
+  readonly genders = GENDERS;
   registerForm: FormGroup;
 
   constructor(
@@ -128,23 +106,6 @@ export class RegisterComponent {
         phone: this.registerForm.value.phone,
         password: this.registerForm.value.password,
       })
-      .subscribe({
-        next: (res) => {
-          const token = res.headers.get('Authorization');
-          if (token) sessionStorage.setItem('token', token);
-          else throw new Error('No se ha recibido el token');
-          this.router.navigate(['home']).then();
-        },
-        error: (error) => {
-          console.error('Register error', error);
-          this.snackBar.open(error.error.message, '', {
-            duration: 5000,
-            panelClass: ['error-snackbar', 'mb-5'],
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-          });
-        },
-      });
   }
 
   goToLogin() {

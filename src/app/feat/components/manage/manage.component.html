@@ -1,7 +1,7 @@
 <div
   class="mat-elevation-z8"
   style="--mat-sys-surface: #f0f9ff"
-  *ngIf="dataSource"
+  *ngIf="dataSource.data.length > 0; else noData"
 >
   <table mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="doctorName">
@@ -68,6 +68,13 @@
   <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
   </mat-paginator>
 </div>
+
+<ng-template #noData>
+  <div class="flex flex-col items-center justify-center h-96">
+    <mat-icon class="text-6xl text-gray-400">info</mat-icon>
+    <p class="text-gray-600 mt-4">Parece que no tienes citas programadas.</p>
+  </div>
+</ng-template>
 
 <style>
   .centered-cell {
