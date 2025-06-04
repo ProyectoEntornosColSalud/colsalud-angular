@@ -1,1 +1,0 @@
-import"./chunk-2NFLSA4Y.js";var t=[{path:"",loadComponent:()=>import("./chunk-6KUZI3US.js").then(o=>o.HomePageComponent)},{path:"doctor",loadComponent:()=>import("./chunk-4C5YXUSA.js").then(o=>o.DoctorViewComponent)}];export{t as routes};
